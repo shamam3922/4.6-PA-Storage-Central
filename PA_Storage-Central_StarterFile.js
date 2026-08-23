@@ -93,5 +93,85 @@ document.querySelectorAll(".product-card button").forEach(button => {
         addToCart(name, price);
     });
 });
+// Save cart + stock to localStorage
+localStorage.setItem("cart", JSON.stringify(cart));
+localStorage.setItem("stock", JSON.stringify(stock));
 
+// Clear cart
+document.getElementById("clear-cart").addEventListener("click", () => {
+    cart = [];
+    localStorage.removeItem("cart");
+    updateCartDisplay();
+});
 
+// Checkout
+document.getElementById("checkout").addEventListener("click", () => {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // Save last purchased items in a cookie
+    document.cookie = "lastPurchased=" + 
+        cart.map(item => item.name).join(", ") + "; path=/;";
+
+    alert("Thank you for your purchase!");
+    cart = [];
+    localStorage.removeItem("cart");
+    updateCartDisplay();
+});
+
+// Update stock display
+function updateStockDisplay() {
+    document.querySelectorAll(".product-card").forEach(card => {
+        const name = card.querySelector("h3").textContent;
+        const stockText = card.querySelector(".stock");
+        const button = card.querySelector("button");
+
+        stockText.textContent = 
+            stock[name] > 0 ? `In stock: ${stock[name]}` : "Out of stock";
+
+        if (stock[name] <= 0) {
+            button.disabled = true;
+            card.style.opacity = "0.5";
+            card.style.cursor = "not-allowed";
+            card.title = "Out of Stock";
+        } else {
+            button.disabled = false;
+            card.style.opacity = "1";
+            card.style.cursor = "pointer";
+            card.title = "";
+        }
+    });
+}
+
+// Add-to-cart animation
+function animateAdd(name) {
+    const card = [...document.querySelectorAll(".product-card")]
+        .find(c => c.querySelector("h3").textContent === name);
+
+    card.style.transition = "transform 0.2s, background 0.2s";
+    card.style.transform = "scale(1.05)";
+    card.style.background = "#d9f7d9";
+
+    setTimeout(() => {
+        card.style.transform = "scale(1)";
+        card.style.background = "";
+    }, 200);
+}
+
+// Load last purchased cookie
+function getLastPurchased() {
+    let cookies = document.cookie.split("; ");
+    for (let c of cookies) {
+        if (c.startsWith("lastPurchased=")) {
+            return c.replace("lastPurchased=", "");
+        }
+    }
+    return "None";
+}
+
+document.getElementById("last-purchased").textContent = getLastPurchased();
+
+// Initial stock update
+updateStockDisplay();
