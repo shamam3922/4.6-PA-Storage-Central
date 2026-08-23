@@ -170,4 +170,48 @@ button:disabled {
     main { 
         padding-right: 0; 
     }
+/* CART SECTION */
+#cart-section {
+    background: #f8f4f0;
+    padding: 20px;
+    margin: 30px auto;
+    width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+}
+
+#cart-items {
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    box-shadow: 0 0 5px #ddd;
+}
+
+.quantity-controls button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+
+.cart-buttons button {
+    padding: 10px 15px;
+    margin-right: 10px;
+    background: #5a4632;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cart-buttons button:hover {
+    background: #7a5c3f;
+}
+
 }
