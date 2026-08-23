@@ -1,8 +1,3 @@
-
-    //Author: Shaun Mammano
-    //Date: 26 Aug 2026
-    //Purpose: 4.6
-
 // Author: Shaun Mammano
 // Date: 26 Aug 2026
 // Purpose: 4.6
@@ -157,6 +152,9 @@ function updateStockDisplay() {
 }
 
 // Add-to-cart animation
+// Visual Indication:
+// When a product is added to the cart, the product card briefly scales up (bounce effect)
+// and flashes a light green background to show the action was successful.
 function animateAdd(name) {
     const card = [...document.querySelectorAll(".product-card")]
         .find(c => c.querySelector("h3").textContent === name);
