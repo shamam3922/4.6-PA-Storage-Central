@@ -3,7 +3,7 @@
     Date: 26 Aug 2026
     Purpose: 4.6
     let cart = [];
-
+*/
 function addToCart(name, price) {
     let item = cart.find(product => product.name === name);
 
@@ -85,4 +85,4 @@ document.querySelectorAll(".product-card button").forEach(button => {
     });
 });
 
-*/
+
