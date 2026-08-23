@@ -213,5 +213,13 @@ button:disabled {
 .cart-buttons button:hover {
     background: #7a5c3f;
 }
+     footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    font-size: 0.9rem;
+    color: #3f3128;
+}
+
 
 }
