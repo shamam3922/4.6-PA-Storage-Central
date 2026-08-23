@@ -2,25 +2,28 @@
     //Author: Shaun Mammano
     //Date: 26 Aug 2026
     //Purpose: 4.6
-    let cart = [];
 
-// Load cart from localStorage if it exists
+let stock = {
+    "Aurora Vase": 4,
+    "Ember Bowl": 3,
+    "Crystal Wave": 2,
+    "Solar Lantern": 5,
+    "Frost Pendant": 1,
+    "Nebula Orb": 0
+};
+
+  // Load cart from localStorage
 if (localStorage.getItem("cart")) {
     cart = JSON.parse(localStorage.getItem("cart"));
     updateCartDisplay();
 }
 
-function addToCart(name, price) {
-    let item = cart.find(product => product.name === name);
-
-    if (item) {
-        item.quantity++;
-    } else {
-        cart.push({ name, price, quantity: 1 });
-    }
-
-    updateCartDisplay();
+// Load stock from localStorage
+if (localStorage.getItem("stock")) {
+    stock = JSON.parse(localStorage.getItem("stock"));
+    updateStockDisplay();
 }
+
 
 function updateCartDisplay() {
     const cartItemsDiv = document.getElementById("cart-items");
