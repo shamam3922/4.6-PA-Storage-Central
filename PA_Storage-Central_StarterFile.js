@@ -11,6 +11,43 @@ let stock = {
     "Frost Pendant": 1,
     "Nebula Orb": 0
 };
+let cart = []; // You MUST have this at the top
+
+function addToCart(name, price) {
+
+    // Prevent adding if out of stock
+    if (stock[name] <= 0) return;
+
+    // Find item in cart
+    let item = cart.find(product => product.name === name);
+
+    if (item) {
+        item.quantity++;
+    } else {
+        cart.push({ name, price, quantity: 1 });
+    }
+
+    // Reduce stock
+    stock[name]--;
+
+    // Save to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("stock", JSON.stringify(stock));
+
+    // Update displays
+    updateCartDisplay();
+    updateStockDisplay();
+
+    // Animation
+    animateAdd(name);
+
+    // Session counter
+    sessionStorage.setItem(
+        "sessionCount",
+        Number(sessionStorage.getItem("sessionCount") || 0) + 1
+    );
+}
+
 
   // Load cart from localStorage
 if (localStorage.getItem("cart")) {
