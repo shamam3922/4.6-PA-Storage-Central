@@ -3,6 +3,10 @@
     //Date: 26 Aug 2026
     //Purpose: 4.6
 
+// Author: Shaun Mammano
+// Date: 26 Aug 2026
+// Purpose: 4.6
+
 let stock = {
     "Aurora Vase": 4,
     "Ember Bowl": 3,
@@ -11,14 +15,14 @@ let stock = {
     "Frost Pendant": 1,
     "Nebula Orb": 0
 };
-let cart = []; // You MUST have this at the top
 
+let cart = []; // REQUIRED
+
+// Add to Cart
 function addToCart(name, price) {
 
-    // Prevent adding if out of stock
-    if (stock[name] <= 0) return;
+    if (stock[name] <= 0) return; // Out of stock
 
-    // Find item in cart
     let item = cart.find(product => product.name === name);
 
     if (item) {
@@ -27,41 +31,30 @@ function addToCart(name, price) {
         cart.push({ name, price, quantity: 1 });
     }
 
-    // Reduce stock
-    stock[name]--;
+    stock[name]--; // reduce stock
 
-    // Save to localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
     localStorage.setItem("stock", JSON.stringify(stock));
 
-    // Update displays
     updateCartDisplay();
     updateStockDisplay();
-
-    // Animation
     animateAdd(name);
 
-    // Session counter
     sessionStorage.setItem(
         "sessionCount",
         Number(sessionStorage.getItem("sessionCount") || 0) + 1
     );
 }
 
-
-  // Load cart from localStorage
+// Load cart + stock
 if (localStorage.getItem("cart")) {
     cart = JSON.parse(localStorage.getItem("cart"));
-    updateCartDisplay();
 }
-
-// Load stock from localStorage
 if (localStorage.getItem("stock")) {
     stock = JSON.parse(localStorage.getItem("stock"));
-    updateStockDisplay();
 }
 
-
+// Update Cart Display
 function updateCartDisplay() {
     const cartItemsDiv = document.getElementById("cart-items");
     const cartCount = document.getElementById("cart-count");
@@ -90,51 +83,33 @@ function updateCartDisplay() {
 
     cartCount.textContent = totalItems;
     cartTotal.textContent = totalCost.toFixed(2);
+
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
+// Change Quantity
 function changeQuantity(name, amount) {
     let item = cart.find(product => product.name === name);
-
     if (!item) return;
 
     item.quantity += amount;
+
+    if (amount < 0) {
+        stock[name]++; // restore stock
+    }
 
     if (item.quantity <= 0) {
         cart = cart.filter(product => product.name !== name);
     }
 
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("stock", JSON.stringify(stock));
+
     updateCartDisplay();
+    updateStockDisplay();
 }
 
-document.getElementById("clear-cart").addEventListener("click", () => {
-    cart = [];
-    updateCartDisplay();
-});
-
-document.getElementById("checkout").addEventListener("click", () => {
-    if (cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-    }
-
-    alert("Thank you for your purchase!");
-    cart = [];
-    updateCartDisplay();
-});
-
-document.querySelectorAll(".product-card button").forEach(button => {
-    button.addEventListener("click", (event) => {
-        const card = event.target.closest(".product-card");
-        const name = card.querySelector("h3").textContent;
-        const price = parseFloat(card.querySelector(".price").textContent.replace("$", ""));
-        addToCart(name, price);
-    });
-});
-// Save cart + stock to localStorage
-localStorage.setItem("cart", JSON.stringify(cart));
-localStorage.setItem("stock", JSON.stringify(stock));
-
-// Clear cart
+// Clear Cart
 document.getElementById("clear-cart").addEventListener("click", () => {
     cart = [];
     localStorage.removeItem("cart");
@@ -148,8 +123,7 @@ document.getElementById("checkout").addEventListener("click", () => {
         return;
     }
 
-    // Save last purchased items in a cookie
-    document.cookie = "lastPurchased=" + 
+    document.cookie = "lastPurchased=" +
         cart.map(item => item.name).join(", ") + "; path=/;";
 
     alert("Thank you for your purchase!");
@@ -158,14 +132,14 @@ document.getElementById("checkout").addEventListener("click", () => {
     updateCartDisplay();
 });
 
-// Update stock display
+// Update Stock Display
 function updateStockDisplay() {
     document.querySelectorAll(".product-card").forEach(card => {
         const name = card.querySelector("h3").textContent;
         const stockText = card.querySelector(".stock");
         const button = card.querySelector("button");
 
-        stockText.textContent = 
+        stockText.textContent =
             stock[name] > 0 ? `In stock: ${stock[name]}` : "Out of stock";
 
         if (stock[name] <= 0) {
@@ -212,3 +186,4 @@ document.getElementById("last-purchased").textContent = getLastPurchased();
 
 // Initial stock update
 updateStockDisplay();
+updateCartDisplay();
