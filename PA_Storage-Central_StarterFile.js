@@ -10,6 +10,16 @@ let stock = {
     "Frost Pendant": 1,
     "Nebula Orb": 0
 };
+// Attach Add to Cart button listeners
+document.querySelectorAll(".product-card button").forEach(button => {
+    button.addEventListener("click", () => {
+        const card = button.closest(".product-card");
+        const name = card.querySelector("h3").textContent;
+        const price = parseFloat(card.querySelector(".price").textContent.replace("$", ""));
+        addToCart(name, price);
+    });
+});
+
 
 let cart = []; // REQUIRED
 
