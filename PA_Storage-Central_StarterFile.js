@@ -4,6 +4,12 @@
     //Purpose: 4.6
     let cart = [];
 
+// Load cart from localStorage if it exists
+if (localStorage.getItem("cart")) {
+    cart = JSON.parse(localStorage.getItem("cart"));
+    updateCartDisplay();
+}
+
 function addToCart(name, price) {
     let item = cart.find(product => product.name === name);
 
